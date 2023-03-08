@@ -5,13 +5,13 @@ require("../models/connection");
 const Recipe = require("../models/recipes");
 // const User = require("../models/users");
 
-router.get("/", (req, res) => {
+router.get("/all", (req, res) => {
   Recipe.find().then((recipesData) => {
     res.json({ recipesData });
   });
 });
 
-router.post("/", (req, res) => {
+router.post("/new", (req, res) => {
   Recipe.findOne({ title: req.body.title }).then((data) => {
     if (data === null) {
       const newRecipe = new Recipe({
