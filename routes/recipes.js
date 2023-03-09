@@ -5,10 +5,22 @@ require("../models/connection");
 const Recipe = require("../models/recipes");
 // const User = require("../models/users");
 
-router.get("/", (req, res) => {
-  Recipe.find().then((recipesData) => {
-    res.json({ recipesData });
-  });
+router.get("/", async (req, res) => {
+  const { page = 1, limit = 6 } = req.query;
+  try {
+    const recipes = await Recipe.find()
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .exec();
+    const count = await Recipe.countDocuments();
+    res.json({
+      recipes,
+      totalPages: Math.ceil(count / limit),
+      currentPage: page,
+    });
+  } catch (e) {
+    console.error("erreur : ", e.message);
+  }
 });
 
 router.post("/", (req, res) => {
