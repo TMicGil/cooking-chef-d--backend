@@ -6,18 +6,11 @@ const Recipe = require("../models/recipes");
 // const User = require("../models/users");
 
 router.get("/", async (req, res) => {
-  const { page = 1, limit = 6 } = req.query;
+  const limit = parseInt(req.query.limit);
+  const offset = parseInt(req.query.skip);
   try {
-    const recipes = await Recipe.find()
-      .limit(limit * 1)
-      .skip((page - 1) * limit)
-      .exec();
-    const count = await Recipe.countDocuments();
-    res.json({
-      recipes,
-      totalPages: Math.ceil(count / limit),
-      currentPage: page,
-    });
+    const recipes = await Recipe.find().limit(limit).skip(offset);
+    res.json(recipes);
   } catch (e) {
     console.error("erreur : ", e.message);
   }
