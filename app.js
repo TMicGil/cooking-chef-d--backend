@@ -21,6 +21,4 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/recipes", recipesRouter);
 app.use("/users", usersRouter);
 
-console.log(process.env.NODE_ENV);
-
 module.exports = app;
